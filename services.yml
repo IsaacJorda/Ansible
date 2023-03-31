@@ -1,0 +1,106 @@
+- name: Contar bancos de dados diferentes
+  hosts: all
+  ignore_errors: true
+  tasks:
+    - name: Verificar se o MySQL está instalado
+      shell: "which mysql"
+      register: mysql_check
+    - name: Verificar se o PostgreSQL está instalado
+      shell: "which psql"
+      register: postgres_check
+    - name: Verificar se o SQL Server está instalado
+      shell: "which sqlcmd"
+      register: sqlserver_check
+    - name: Verificar se o MongoDB está instalado
+      shell: "which mongod"
+      register: mongodb_check
+    - name: Verificar se o Oracle está instalado
+      shell: "which sqlplus"
+      register: oracle_check
+
+    - name: Verificar se o Apache está instalado
+      systemd:
+        name: httpd
+        state: started
+      register: apache_check
+
+    - name: Verificar se o Nginx está instalado
+      systemd:
+        name: nginx
+        state: started
+      register: nginx_check
+    - name: Verificar se o HAProxy está instalado
+      systemd:
+        name: haproxy
+        state: started
+      register: haproxy_check
+    - name: Verificar se o Tomcat está instalado
+      systemd:
+        name: tomcat
+        state: started
+      register: tomcat_check
+    - name: Verificar se o Glassfish está instalado
+      systemd:
+        name: glassfish
+        state: started
+      register: glassfish_check
+    - name: Verificar se o JBoss está instalado
+      systemd:
+        name: jboss
+        state: started
+      register: jboss_check
+    - name: Verificar se o WebLogic está instalado
+      systemd:
+        name: weblogic
+        state: started
+      register: weblogic_check
+    - name: Verificar se o Jetty está instalado
+      systemd:
+        name: jetty
+        state: started
+      register: jetty_check
+    - name: Verificar se o Gunicorn está instalado
+      systemd:
+        name: gunicorn
+        state: started
+      register: gunicorn_check
+
+    - name: Contar bancos de dados encontrados
+      set_fact:
+        mysql_count: "{{ mysql_check.stdout_lines | select('search', 'mysql') | length }}"
+        postgres_count: "{{ postgres_check.stdout_lines | select('search', 'psql') | length }}"
+        sqlserver_count: "{{ sqlserver_check.stdout_lines | select('search', 'sqlcmd') | length }}"
+        mongodb_count: "{{ mongodb_check.stdout_lines | select('search', 'mongod') | length }}"
+        oracle_count: "{{ oracle_check.stdout_lines | select('search', 'sqlplus') | length }}"
+    - name: imprimir contagem de banco de dados
+      debug:
+        msg:
+          - "PostgreSQL: {{ postgres_count }}"
+          - "MySQL: {{ mysql_count }}"
+          - "SQL Server: {{ sqlserver_count }}"
+          - "MongoDB: {{ mongodb_count }}"
+          - "Oracle: {{ oracle_count }}"
+
+    - name: Contar serviços encontrados
+      set_fact:
+        apache_count: "{{ apache_check.changed | ternary(1,0) }}"
+        nginx_count: "{{ nginx_check.changed | ternary(1,0) }}"
+        haproxy_count: "{{ haproxy_check.changed | ternary(1,0) }}"
+        tomcat_count: "{{ tomcat_check.changed | ternary(1,0) }}"
+        glassfish_count: "{{ glassfish_check.changed | ternary(1,0) }}"
+        jboss_count: "{{ jboss_check.changed | ternary(1,0) }}"
+        weblogic_count: "{{ weblogic_check.changed | ternary(1,0) }}"
+        jetty_count: "{{ jetty_check.changed | ternary(1,0) }}"
+        gunicorn_count: "{{ gunicorn_check.changed | ternary(1,0) }}"
+    - name: imprimir contagem de serviços
+      debug:
+        msg:
+          - "Apache: {{ apache_count }}"
+          - "Nginx: {{ nginx_count }}"
+          - "HAProxy: {{ haproxy_count }}"
+          - "Tomcat: {{ tomcat_count }}"
+          - "Glassfish: {{ glassfish_count }}"
+          - "JBoss: {{ jboss_count }}"
+          - "WebLogic: {{ weblogic_count }}"
+          - "Jetty: {{ jetty_count }}"
+          - "Gunicorn: {{ gunicorn_count }}"        
