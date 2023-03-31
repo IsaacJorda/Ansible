@@ -1,0 +1,12 @@
+---
+- name: Ativa os sudo dos usuários
+  hosts: all
+  become: true
+  tasks:
+    - name: Validate the sudoers file before saving
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        state: present
+        regexp: '^%suporteati ALL='
+        line: '%suporteati ALL=(ALL) NOPASSWD: ALL'
+        validate: /usr/sbin/visudo -cf %s
