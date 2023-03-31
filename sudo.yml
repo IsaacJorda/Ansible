@@ -7,6 +7,6 @@
       ansible.builtin.lineinfile:
         path: /etc/sudoers
         state: present
-        regexp: '^%suporteati ALL='
-        line: '%suporteati ALL=(ALL) NOPASSWD: ALL'
+        regexp: '^%user ALL='
+        line: '%user ALL=(ALL) NOPASSWD: ALL'
         validate: /usr/sbin/visudo -cf %s
